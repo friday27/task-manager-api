@@ -18,7 +18,7 @@ const auth = async (req, res, next) => {
         req.user = user;
         next();
     } catch (e) { 
-        res.send(401).send({error: 'The auth token is illegal.'});
+        res.send(401).send();
     }
 }
 

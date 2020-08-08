@@ -13,11 +13,11 @@ router.post('/users', async(req, res) => {
     try {
         await user.save();
         sendWelcomeEmail(user.email, user.name);
-        const token = user.generateAuthToken();
-        res.status(201).send(user);
+        const token = await user.generateAuthToken();
+        res.status(201).send({user, token});
     } catch(e) {
         //If user.save() is not successful, it will throw an error.
-        res.status(400).send(e);
+        res.status(400).send();
     }
 });
 
@@ -38,7 +38,7 @@ router.post('/users/logout', auth, async (req, res) => {
         await req.user.save();
         res.send();
     } catch (e) {
-        res.status(500).send(e);
+        res.status(500).send();
     }
 });
 
@@ -48,7 +48,7 @@ router.post('/users/logoutAll', auth, async (req, res) => {
         await req.user.save();
         res.send();
     } catch (e) {
-        res.status(500).send(e);
+        res.status(500).send();
     }
 });
 
@@ -75,7 +75,7 @@ router.patch('/users/me', auth, async (req, res) => {
         await req.user.save();
         res.send(req.user);
     } catch (e) {
-        res.send(400).send(e);
+        res.send(400).send();
     }
 });
 
@@ -83,9 +83,9 @@ router.delete('/users/me', auth, async (req, res) => {
     try {
         await req.user.remove();
         sendGoodbyeEmail(req.user.email, req.user.name);
-        res.send(user);
+        res.send();
     } catch (e) {
-        res.status(400).send(e);
+        res.status(400).send();
     }
 });
 
