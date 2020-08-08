@@ -75,8 +75,12 @@ input:focus {
 
 .fa-plus {
     float: right;
+    margin-right: 10px;
 }
 
+.fa-save {
+    float: right;
+}
 
 .completed {
     color: grey;

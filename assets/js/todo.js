@@ -1,3 +1,4 @@
+
 //Check off specific todos by clicking
 //Add listener to the entire ul (for all potential li)
 $("ul").on("click", "li", function(){
@@ -24,4 +25,9 @@ $("input[type='text']").on("keypress", function(event){
 //Make the input box fadeIn/FadeOut once click it
 $(".fa-plus").click(function(){
     $("input[type='text']").fadeToggle();
+});
+
+// save the current tasks into database 
+$(".fa-save").click(function(){
+    // $("input[type='text']").fadeToggle();
 });
