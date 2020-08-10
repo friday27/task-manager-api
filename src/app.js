@@ -1,16 +1,26 @@
 const express = require('express');
-require('./db/mongoose');
-const userRouter = require('./routers/user');
-const taskRouter = require('./routers/task');
+const bodyParser = require('body-parser');
+const db = require('./db/queries');
 
 const app = express();
-// const port = process.env.PORT;
 
-//automatically parse JSON input
-app.use(express.json()); 
-app.use(userRouter); //register the router with express app
-app.use(taskRouter);
+app.use(bodyParser.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 
-// remove app.listen()
+app.get('/', (request, response) => {
+  response.json({ info: 'Node.js, Express, and Postgres API' })
+});
+
+app.post('/users', db.createUser);
+app.delete('/users/:id', db.deleteUser);
+
+app.get('/tasks', db.getTasks);
+app.post('/tasks', db.addTasks);
+app.patch('/tasks/:id', db.updateTasks);
+app.delete('/tasks/:id', db.deleteTasks);
 
 module.exports = app;

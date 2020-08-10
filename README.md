@@ -2,9 +2,24 @@
 
 ## Todos
 
-* New button: save tasks in Postgre database
-  * Create local Postgre database
-  * Save tasks into database
-  * Deploy on Heroku
+* bodyparser
+* middleware
 
-* log in/out
+* auth
+
+* routes
+  * GET - /tasks
+  * POST - /tasks
+  * PATCH - /tasks/:id
+  * DELETE - /tasks/:id
+  
+  * POST - /users
+  * DELETE - /users
+
+  * POST - /users/login
+  * POST - /users/logout
+
+## References
+
+* [Setting up a RESTful API with Node.js and PostgreSQL](https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-d96d6fc892d8/)
+* [node-postgres.com](https://node-postgres.com/)
