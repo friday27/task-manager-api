@@ -1,8 +1,10 @@
-const {Sequelize, DataTypes, Deferrable} = require('sequelize');
+const {Sequelize, DataTypes, Deferrable, Model} = require('sequelize');
 const sequelize = require('../db/postgres');
 const User = require('./user');
 
-const Task = sequelize.define('Task', {
+class Task extends Model {}
+
+Task.init({
   task: {
     type: DataTypes.STRING,
     allowNull: false
@@ -19,9 +21,8 @@ const Task = sequelize.define('Task', {
       deferrable: Deferrable.INITIALLY_IMMEDIATE
     }
   }
-}, {
-  tableName: 'tasks'
-});
+},
+{sequelize, tableName: 'tasks'});
 
 sequelize.sync({ force: true }).then(function(err) {
   console.log('It worked!');

@@ -1,6 +1,6 @@
 const {Sequelize, DataTypes, Model} = require('sequelize');
 const sequelize = require('../db/postgres');
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 class User extends Model {
@@ -26,7 +26,7 @@ class User extends Model {
   async generateAuthToken() {
     const user = this;
     const token = jwt.sign({_id: user.id.toString()}, process.env.JWT_SECRET);
-    user.tokens = token;
+    user.token = token;
     await user.save();
     return token;
   }
@@ -47,10 +47,10 @@ User.init({
     allowNull: false,
     unique: true
   },
-  // tokens: {
-  //   type: DataTypes.STRING, 
-  //   // allowNull: false
-  // }
+  token: {
+    type: DataTypes.STRING, 
+    // allowNull: false
+  }
 },
 {sequelize, tableName: 'users'});
 

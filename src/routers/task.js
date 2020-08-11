@@ -3,7 +3,7 @@ const router = new express.Router();
 const auth = require('../middleware/auth');
 const Task = require('../models/task');
 
-router.get('/tasks', auth, async (req, res) => {
+router.post('/tasks', auth, async (req, res) => {
   const task = new Task({...req.body, userId: req.user.id});
   try {
     await task.save();
@@ -13,6 +13,7 @@ router.get('/tasks', auth, async (req, res) => {
   }
 });
 
+// router.get
 // router.post('/tasks', db.addTasks);
 // router.patch('/tasks/:id', db.updateTasks);
 // router.delete('/tasks/:id', db.deleteTasks);

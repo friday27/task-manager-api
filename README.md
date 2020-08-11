@@ -7,10 +7,6 @@
 * bodyparser
 * middleware
 
-* postgres models
-  * sync
-  * migrations
-
 * routes
   * GET - /taskss
   * POST - /tasks
@@ -18,7 +14,6 @@
   * DELETE - /tasks/:id
   * POST - /users
   * DELETE - /users
-
   * POST - /users/login
   * POST - /users/logout
 
