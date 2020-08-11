@@ -13,9 +13,35 @@ router.post('/tasks', auth, async (req, res) => {
   }
 });
 
-// router.get
-// router.post('/tasks', db.addTasks);
-// router.patch('/tasks/:id', db.updateTasks);
+router.get('/tasks', auth, async (req, res) => {
+  try {
+    const tasks = await Task.findAll({where: {userId: req.user.id}});
+    res.send(tasks);
+  } catch (e) {
+    res.status(500).send();
+  }
+});
+
+router.patch('/tasks/:id', auth, async (req, res) => {
+  //check if the update is allowed
+  const updates = Object.keys(req.body);
+  const allowedUpdates = ['task', 'completed'];
+  const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+  if (!isValidOperation) return res.status(400).send({error: 'Invalid updates!'});
+
+  try {
+    await Task.update({...req.body}, {
+      where: {
+        id: req.params.id,
+        userId: req.user.id
+      }
+    });
+    return res.status(200).send();
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
+
 // router.delete('/tasks/:id', db.deleteTasks);
 
 module.exports = router;

@@ -49,7 +49,7 @@ User.init({
   },
   token: {
     type: DataTypes.STRING, 
-    // allowNull: false
+    unique: true
   }
 },
 {sequelize, tableName: 'users'});
