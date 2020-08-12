@@ -4,8 +4,8 @@ const auth = require('../middleware/auth');
 const Task = require('../models/task');
 
 router.post('/tasks', auth, async (req, res) => {
-  const task = new Task({...req.body, userId: req.user.id});
   try {
+    const task = await Task.create({...req.body, userId: req.user.id});
     await task.save();
     res.status(201).send(task);
   } catch (e) {
@@ -14,8 +14,21 @@ router.post('/tasks', auth, async (req, res) => {
 });
 
 router.get('/tasks', auth, async (req, res) => {
+  const match = {};
+  if (req.query.completed) match.completed = req.query.completed;
+
+  let order = [];
+  if (req.query.sortBy) {
+    const sort = req.query.sortBy.split(':');
+    order = [[sort[0], sort[1]? sort[1]: 'ASC']];
+  }
+
   try {
-    const tasks = await Task.findAll({where: {userId: req.user.id}});
+    const tasks = await Task.findAll({
+      where: {userId: req.user.id, ...match},
+      attributes: ['id', 'task', 'completed'],
+      order
+    });
     res.send(tasks);
   } catch (e) {
     res.status(500).send();
@@ -36,12 +49,19 @@ router.patch('/tasks/:id', auth, async (req, res) => {
         userId: req.user.id
       }
     });
-    return res.status(200).send();
+    return res.send();
   } catch (e) {
     res.status(400).send(e);
   }
 });
 
-// router.delete('/tasks/:id', db.deleteTasks);
+router.delete('/tasks/:id', auth, async (req, res) => {
+  try {
+    await Task.destroy({where: {id: req.params.id}});
+    res.send();
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
 
 module.exports = router;

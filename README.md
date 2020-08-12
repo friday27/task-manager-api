@@ -7,15 +7,10 @@
 * bodyparser
 * middleware
 
-* routes
-  * GET - /taskss
-  * POST - /tasks
-  * PATCH - /tasks/:id
-  * DELETE - /tasks/:id
-  * POST - /users
-  * DELETE - /users
-  * POST - /users/login
-  * POST - /users/logout
+* routes (done)
+* sort tasks (done)
+
+* bcrypt password
 
 ## References
 

@@ -55,7 +55,7 @@ User.init({
 {sequelize, tableName: 'users'});
 
 // create model
-sequelize.sync({ force: true }).then(function(err) {
+sequelize.sync({alter: true}).then(function(err) {
   console.log('It worked!');
 }, function (err) { 
   console.log('An error occurred while creating the table:', err);
