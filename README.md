@@ -10,6 +10,8 @@
 * routes (done)
 * sort tasks (done)
 
+* PATCH /user
+
 * bcrypt password
 
 ## References

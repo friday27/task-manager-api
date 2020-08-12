@@ -1,35 +1,29 @@
 const {Sequelize, DataTypes, Model} = require('sequelize');
 const sequelize = require('../db/postgres');
-// const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 class User extends Model {
   static async findByCredentials(email, password) {
-    const user = await User.findOne({email});
-    if (!user) throw new Error('Unable to login.');
-    // const isMatch = await bcrypt.compare(password, user.dataValues.password);
-    if (!password === user.dataValues.password) throw new Error('Unable to login.');
-    return user;
+    const user = await User.findAll({ 
+      where: {
+        email
+      }
+    });
+    if (user.length === 0) throw new Error('Unable to login.');
+    const isMatch = await bcrypt.compare(password, user[0].dataValues.password);
+    if (!isMatch) throw new Error('Unable to login.');
+    // if (!password === user.dataValues.password) throw new Error('Unable to login.');
+    return user[0];
   };
-
-  static toJSON() {
-    const user = this;
-    return {
-      id: user.dataValues.id,
-      name: user.dataValues.name,
-      email: user.dataValues.email,
-      updatedAt: user.dataValues.updatedAt,
-      createdAt: user.dataValues.createdAt
-    };
-  }
 
   async generateAuthToken() {
     const user = this;
-    const token = jwt.sign({_id: user.id.toString()}, process.env.JWT_SECRET);
+    const token = jwt.sign({id: user.id.toString()}, process.env.JWT_SECRET);
     user.token = token;
     await user.save();
     return token;
-  }
+  };
 }
 
 // Sequelize will automatically add the columns id, createdAt and updatedAt.
@@ -48,8 +42,7 @@ User.init({
     unique: true
   },
   token: {
-    type: DataTypes.STRING, 
-    unique: true
+    type: DataTypes.STRING,
   }
 },
 {sequelize, tableName: 'users'});
