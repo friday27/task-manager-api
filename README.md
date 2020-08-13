@@ -8,7 +8,7 @@
 * middleware
 
 * web page
-  * http request in client side
+  * http request from client side
   * show failed login
   * CSS style
 
