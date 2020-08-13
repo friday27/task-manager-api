@@ -7,12 +7,18 @@
 * bodyparser
 * middleware
 
-* routes (done)
-* sort tasks (done)
+* web page
+  * http request in client side
+  * show failed login
+  * CSS style
 
-* PATCH /user
+* foreign key
 
-* bcrypt password
+* test cases
+
+* deploy
+
+* update README
 
 ## References
 

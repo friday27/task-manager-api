@@ -1,7 +1,7 @@
 const express = require('express');
 const router = new express.Router();
-const auth = require('../middleware/auth');
 const bcrypt = require('bcrypt');
+const auth = require('../middleware/auth');
 const User = require('../models/user');
 
 router.post('/user', async(req, res) => {
@@ -22,17 +22,14 @@ router.post('/user', async(req, res) => {
 
 router.post('/user/login', async (req, res) => {
   try {
-    const user = await User.findByCredentials(req.body.email, req.body.password);
+    console.log(req.body);
+    const user = await User.findByCredentials(req.body.name, req.body.password);
     const token = await user.generateAuthToken();
-    await user.save();
-    res.send({
-      id: user.dataValues.id,
-      name: user.dataValues.name,
-      email: user.dataValues.email,
-      token
-    });
+    res.redirect('../task.html');
   } catch (e) {
-    res.sendStatus(400);
+    // res.sendStatus(400);
+    console.log('log in failed');
+    res.redirect('../index.html');
   }
 });
 
@@ -51,15 +48,20 @@ router.patch('/user', auth, async (req, res) => {
   const allowedUpdates = ['name', 'email', 'password'];
   const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
   if (!isValidOperation) return res.sendStatus(400);
-  
+
   try {
-      updates.forEach((update) => req.user[update] = req.body[update]);
-      if (updates.includes('password')) req.user.password = await bcrypt.hash(req.body.password, 8);
-      await req.user.save();
+      if (updates.includes('password')) req.body.password = await bcrypt.hash(req.body.password, 8);
+
+      await User.update({...req.body}, {
+        where: {
+          id: req.user.id
+        }
+      });
+
       res.send({
         id: req.user.id,
-        name: req.user.name,
-        email: req.user.email
+        name: req.body.name,
+        email: req.body.email
       });
   } catch (e) {
     res.sendStatus(400);

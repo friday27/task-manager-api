@@ -4,10 +4,10 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 class User extends Model {
-  static async findByCredentials(email, password) {
+  static async findByCredentials(name, password) {
     const user = await User.findAll({ 
       where: {
-        email
+        name
       }
     });
     if (user.length === 0) throw new Error('Unable to login.');
@@ -30,7 +30,8 @@ class User extends Model {
 User.init({
   name: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    unique: true
   },
   password: {
     type: DataTypes.STRING,
